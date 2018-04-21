@@ -15,6 +15,7 @@ public:
 protected:
     FT myLength;
     vector<Polygon_2> myObstacles;
+    Arrangement_2 arr;
     bool _isLegalConfiguration(const Point_2 &point, const Vector_2 &direction,const double rotation) override;
 };
 

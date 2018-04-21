@@ -21,6 +21,12 @@ CGAL/Polygon_2.h
 -
 CGAL/Polygon_set_2.h
 -
+CGAL/Arr_segment_traits_2.h
+-
+CGAL/Arrangement_2.h
+-
+CGAL/Arr_extended_dcel.h
+-
 
 /home/amir/Documents/CS Masters/Robotics/HW3/IQueryHandler.h
 vector

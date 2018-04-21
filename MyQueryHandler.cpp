@@ -7,11 +7,29 @@
 MyQueryHandler::MyQueryHandler(const FT &rodLength, const vector<Polygon_2> &obstacles) {
     myLength = rodLength;
     myObstacles = obstacles;
+    Polygon_set_2 tempPolygonSet;
+    for (Polygon_2 p: obstacles) {
+    	tempPolygonSet.insert(p);
+    }
+
+
+    this->arr =tempPolygonSet.arrangement();
 }
 
 bool MyQueryHandler::_isLegalConfiguration(const Point_2 &point, const Vector_2 &direction, const double rotation) {
 	Segment_2 robot = Segment_2(point,point+(direction*this->myLength));
-	//check zone created by obstacle arrangment
-	//if includes face in the interior of an obstacle - return false;
-    return true;
+	std::vector<CGAL::Object> zone_elems;
+	CGAL::zone(arr,robot,std::back_inserter(zone_elems));
+	Face face;
+	  for ( int i = 0; i < (int)zone_elems.size(); ++i )
+	    {
+	      if (assign(face, zone_elems[i]) ) {
+	    	  if (face==arr.unbounded_face()) {
+	    		  return false;
+	    	  }
+	      }
+
+	    }
+
+	  return true;
 }
