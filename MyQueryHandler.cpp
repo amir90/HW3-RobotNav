@@ -11,8 +11,6 @@ MyQueryHandler::MyQueryHandler(const FT &rodLength, const vector<Polygon_2> &obs
     for (Polygon_2 p: obstacles) {
     	tempPolygonSet.insert(p);
     }
-
-
     this->arr =tempPolygonSet.arrangement();
 }
 
@@ -24,12 +22,11 @@ bool MyQueryHandler::_isLegalConfiguration(const Point_2 &point, const Vector_2 
 	  for ( int i = 0; i < (int)zone_elems.size(); ++i )
 	    {
 	      if (assign(face, zone_elems[i]) ) {
-	    	  if (face==arr.unbounded_face()) {
+	    	  if (face!=arr.unbounded_face()) {
 	    		  return false;
 	    	  }
 	      }
 
 	    }
-
 	  return true;
 }
