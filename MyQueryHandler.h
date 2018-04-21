@@ -10,8 +10,11 @@
 
 class MyQueryHandler : public IQueryHandler {
 public:
+
     MyQueryHandler(const FT &rodLength, const vector<Polygon_2> &obstacles);
 protected:
+    FT myLength;
+    vector<Polygon_2> myObstacles;
     bool _isLegalConfiguration(const Point_2 &point, const Vector_2 &direction,const double rotation) override;
 };
 
