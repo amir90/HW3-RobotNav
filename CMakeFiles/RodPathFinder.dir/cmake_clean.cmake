@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o"
   "CMakeFiles/RodPathFinder.dir/Path.cpp.o"
   "CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o"
+  "CMakeFiles/RodPathFinder.dir/MyQueryHandler.cpp.o"
   "RodPathFinder.pdb"
   "RodPathFinder"
 )

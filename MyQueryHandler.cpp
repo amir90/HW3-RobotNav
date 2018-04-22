@@ -26,7 +26,6 @@ bool MyQueryHandler::_isLegalConfiguration(const Point_2 &point, const Vector_2 
 	    		  return false;
 	    	  }
 	      }
-
 	    }
 	  return true;
 }

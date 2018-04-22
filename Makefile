@@ -142,6 +142,7 @@ MyQueryHandler.o: MyQueryHandler.cpp.o
 
 # target to build an object file
 MyQueryHandler.cpp.o:
+	$(MAKE) -f CMakeFiles/RodPathFinder.dir/build.make CMakeFiles/RodPathFinder.dir/MyQueryHandler.cpp.o
 	$(MAKE) -f CMakeFiles/QueryHandler.dir/build.make CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o
 .PHONY : MyQueryHandler.cpp.o
 
@@ -151,6 +152,7 @@ MyQueryHandler.i: MyQueryHandler.cpp.i
 
 # target to preprocess a source file
 MyQueryHandler.cpp.i:
+	$(MAKE) -f CMakeFiles/RodPathFinder.dir/build.make CMakeFiles/RodPathFinder.dir/MyQueryHandler.cpp.i
 	$(MAKE) -f CMakeFiles/QueryHandler.dir/build.make CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.i
 .PHONY : MyQueryHandler.cpp.i
 
@@ -160,6 +162,7 @@ MyQueryHandler.s: MyQueryHandler.cpp.s
 
 # target to generate assembly for a file
 MyQueryHandler.cpp.s:
+	$(MAKE) -f CMakeFiles/RodPathFinder.dir/build.make CMakeFiles/RodPathFinder.dir/MyQueryHandler.cpp.s
 	$(MAKE) -f CMakeFiles/QueryHandler.dir/build.make CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.s
 .PHONY : MyQueryHandler.cpp.s
 

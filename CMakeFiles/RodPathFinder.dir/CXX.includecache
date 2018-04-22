@@ -34,9 +34,19 @@ vector
 CGAL_defines.h
 /home/amir/Documents/CS Masters/Robotics/HW3/CGAL_defines.h
 
+/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.cpp
+MyQueryHandler.h
+/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.h
+
+/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.h
+IQueryHandler.h
+/home/amir/Documents/CS Masters/Robotics/HW3/IQueryHandler.h
+
 /home/amir/Documents/CS Masters/Robotics/HW3/MyRodPathFinder.cpp
 MyRodPathFinder.h
 /home/amir/Documents/CS Masters/Robotics/HW3/MyRodPathFinder.h
+MyQueryHandler.h
+/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.h
 
 /home/amir/Documents/CS Masters/Robotics/HW3/MyRodPathFinder.h
 vector
