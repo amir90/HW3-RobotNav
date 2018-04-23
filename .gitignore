@@ -1,8 +1,8 @@
 .settings/
 .vscode/
-CmakeFiles/
-*.cmake
-CmakeCache.txt
-Makefile
-RodPathFinder
-QueryHandler
+CMakeFiles/
+/*.cmake
+/CMakeCache.txt
+/Makefile
+/RodPathFinder
+/QueryHandler
