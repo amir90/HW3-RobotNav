@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/amir/Documents/CS Masters/Robotics/HW3"
+CMAKE_SOURCE_DIR = /home/nitai/documents/courses/robotics/workspace/hw3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/amir/Documents/CS Masters/Robotics/HW3"
+CMAKE_BINARY_DIR = /home/nitai/documents/courses/robotics/workspace/hw3
 
 # Include any dependencies generated for this target.
 include CMakeFiles/RodPathFinder.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/RodPathFinder.dir/flags.make
 
 CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o: CMakeFiles/RodPathFinder.dir/flags.make
 CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o: RodPathFinder.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o -c "/home/amir/Documents/CS Masters/Robotics/HW3/RodPathFinder.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o -c /home/nitai/documents/courses/robotics/workspace/hw3/RodPathFinder.cpp
 
 CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/amir/Documents/CS Masters/Robotics/HW3/RodPathFinder.cpp" > CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nitai/documents/courses/robotics/workspace/hw3/RodPathFinder.cpp > CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.i
 
 CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/amir/Documents/CS Masters/Robotics/HW3/RodPathFinder.cpp" -o CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nitai/documents/courses/robotics/workspace/hw3/RodPathFinder.cpp -o CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.s
 
 CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/RodPathFinder.dir/RodPathFinder.cpp.o.provides.build: CMakeFiles/RodP
 
 CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o: CMakeFiles/RodPathFinder.dir/flags.make
 CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o: MyRodPathFinder.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o -c "/home/amir/Documents/CS Masters/Robotics/HW3/MyRodPathFinder.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o -c /home/nitai/documents/courses/robotics/workspace/hw3/MyRodPathFinder.cpp
 
 CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/amir/Documents/CS Masters/Robotics/HW3/MyRodPathFinder.cpp" > CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nitai/documents/courses/robotics/workspace/hw3/MyRodPathFinder.cpp > CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.i
 
 CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/amir/Documents/CS Masters/Robotics/HW3/MyRodPathFinder.cpp" -o CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nitai/documents/courses/robotics/workspace/hw3/MyRodPathFinder.cpp -o CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.s
 
 CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o.requires:
 
@@ -107,16 +107,16 @@ CMakeFiles/RodPathFinder.dir/MyRodPathFinder.cpp.o.provides.build: CMakeFiles/Ro
 
 CMakeFiles/RodPathFinder.dir/Path.cpp.o: CMakeFiles/RodPathFinder.dir/flags.make
 CMakeFiles/RodPathFinder.dir/Path.cpp.o: Path.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/RodPathFinder.dir/Path.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/Path.cpp.o -c "/home/amir/Documents/CS Masters/Robotics/HW3/Path.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/RodPathFinder.dir/Path.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/Path.cpp.o -c /home/nitai/documents/courses/robotics/workspace/hw3/Path.cpp
 
 CMakeFiles/RodPathFinder.dir/Path.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RodPathFinder.dir/Path.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/amir/Documents/CS Masters/Robotics/HW3/Path.cpp" > CMakeFiles/RodPathFinder.dir/Path.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nitai/documents/courses/robotics/workspace/hw3/Path.cpp > CMakeFiles/RodPathFinder.dir/Path.cpp.i
 
 CMakeFiles/RodPathFinder.dir/Path.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RodPathFinder.dir/Path.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/amir/Documents/CS Masters/Robotics/HW3/Path.cpp" -o CMakeFiles/RodPathFinder.dir/Path.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nitai/documents/courses/robotics/workspace/hw3/Path.cpp -o CMakeFiles/RodPathFinder.dir/Path.cpp.s
 
 CMakeFiles/RodPathFinder.dir/Path.cpp.o.requires:
 
@@ -131,16 +131,16 @@ CMakeFiles/RodPathFinder.dir/Path.cpp.o.provides.build: CMakeFiles/RodPathFinder
 
 CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o: CMakeFiles/RodPathFinder.dir/flags.make
 CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o: NaiveQueryHandler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o -c "/home/amir/Documents/CS Masters/Robotics/HW3/NaiveQueryHandler.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o -c /home/nitai/documents/courses/robotics/workspace/hw3/NaiveQueryHandler.cpp
 
 CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/amir/Documents/CS Masters/Robotics/HW3/NaiveQueryHandler.cpp" > CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nitai/documents/courses/robotics/workspace/hw3/NaiveQueryHandler.cpp > CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.i
 
 CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/amir/Documents/CS Masters/Robotics/HW3/NaiveQueryHandler.cpp" -o CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nitai/documents/courses/robotics/workspace/hw3/NaiveQueryHandler.cpp -o CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.s
 
 CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o.requires:
 
@@ -195,17 +195,21 @@ RodPathFinder: CMakeFiles/RodPathFinder.dir/NaiveQueryHandler.cpp.o
 RodPathFinder: CMakeFiles/RodPathFinder.dir/MyQueryHandler.cpp.o
 RodPathFinder: CMakeFiles/RodPathFinder.dir/build.make
 RodPathFinder: /usr/lib/x86_64-linux-gnu/libmpfr.so
-RodPathFinder: /usr/local/lib/libgmp.so
-RodPathFinder: /usr/local/lib/libCGAL.so.13.0.0
-RodPathFinder: /usr/local/lib/libboost_thread.so
-RodPathFinder: /usr/local/lib/libboost_system.so
+RodPathFinder: /usr/lib/x86_64-linux-gnu/libgmp.so
+RodPathFinder: /usr/lib/x86_64-linux-gnu/libCGAL.so.11.0.1
+RodPathFinder: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+RodPathFinder: /usr/lib/x86_64-linux-gnu/libboost_system.so
 RodPathFinder: /usr/lib/x86_64-linux-gnu/libpthread.so
-RodPathFinder: /usr/local/lib/libCGAL.so.13.0.0
-RodPathFinder: /usr/local/lib/libboost_thread.so
-RodPathFinder: /usr/local/lib/libboost_system.so
+RodPathFinder: /usr/lib/x86_64-linux-gnu/libCGAL.so.11.0.1
+RodPathFinder: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+RodPathFinder: /usr/lib/x86_64-linux-gnu/libboost_system.so
 RodPathFinder: /usr/lib/x86_64-linux-gnu/libpthread.so
 RodPathFinder: CMakeFiles/RodPathFinder.dir/link.txt
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable RodPathFinder"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable RodPathFinder"
+>>>>>>> Stashed changes
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/RodPathFinder.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -226,6 +230,6 @@ CMakeFiles/RodPathFinder.dir/clean:
 .PHONY : CMakeFiles/RodPathFinder.dir/clean
 
 CMakeFiles/RodPathFinder.dir/depend:
-	cd "/home/amir/Documents/CS Masters/Robotics/HW3" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/RodPathFinder.dir/DependInfo.cmake" --color=$(COLOR)
+	cd /home/nitai/documents/courses/robotics/workspace/hw3 && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/RodPathFinder.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/RodPathFinder.dir/depend
 

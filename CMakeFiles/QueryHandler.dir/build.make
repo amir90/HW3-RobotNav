@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/amir/Documents/CS Masters/Robotics/HW3"
+CMAKE_SOURCE_DIR = /home/nitai/documents/courses/robotics/workspace/hw3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/amir/Documents/CS Masters/Robotics/HW3"
+CMAKE_BINARY_DIR = /home/nitai/documents/courses/robotics/workspace/hw3
 
 # Include any dependencies generated for this target.
 include CMakeFiles/QueryHandler.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/QueryHandler.dir/flags.make
 
 CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o: CMakeFiles/QueryHandler.dir/flags.make
 CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o: QueryHandler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o -c "/home/amir/Documents/CS Masters/Robotics/HW3/QueryHandler.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o -c /home/nitai/documents/courses/robotics/workspace/hw3/QueryHandler.cpp
 
 CMakeFiles/QueryHandler.dir/QueryHandler.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/QueryHandler.dir/QueryHandler.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/amir/Documents/CS Masters/Robotics/HW3/QueryHandler.cpp" > CMakeFiles/QueryHandler.dir/QueryHandler.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nitai/documents/courses/robotics/workspace/hw3/QueryHandler.cpp > CMakeFiles/QueryHandler.dir/QueryHandler.cpp.i
 
 CMakeFiles/QueryHandler.dir/QueryHandler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/QueryHandler.dir/QueryHandler.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/amir/Documents/CS Masters/Robotics/HW3/QueryHandler.cpp" -o CMakeFiles/QueryHandler.dir/QueryHandler.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nitai/documents/courses/robotics/workspace/hw3/QueryHandler.cpp -o CMakeFiles/QueryHandler.dir/QueryHandler.cpp.s
 
 CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o.provides.build: CMakeFiles/QueryH
 
 CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o: CMakeFiles/QueryHandler.dir/flags.make
 CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o: NaiveQueryHandler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o -c "/home/amir/Documents/CS Masters/Robotics/HW3/NaiveQueryHandler.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o -c /home/nitai/documents/courses/robotics/workspace/hw3/NaiveQueryHandler.cpp
 
 CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/amir/Documents/CS Masters/Robotics/HW3/NaiveQueryHandler.cpp" > CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nitai/documents/courses/robotics/workspace/hw3/NaiveQueryHandler.cpp > CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.i
 
 CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/amir/Documents/CS Masters/Robotics/HW3/NaiveQueryHandler.cpp" -o CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nitai/documents/courses/robotics/workspace/hw3/NaiveQueryHandler.cpp -o CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.s
 
 CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o.requires:
 
@@ -107,16 +107,16 @@ CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o.provides.build: CMakeFiles/Q
 
 CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o: CMakeFiles/QueryHandler.dir/flags.make
 CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o: MyQueryHandler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o -c "/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o -c /home/nitai/documents/courses/robotics/workspace/hw3/MyQueryHandler.cpp
 
 CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.cpp" > CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nitai/documents/courses/robotics/workspace/hw3/MyQueryHandler.cpp > CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.i
 
 CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.cpp" -o CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nitai/documents/courses/robotics/workspace/hw3/MyQueryHandler.cpp -o CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.s
 
 CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o.requires:
 
@@ -143,17 +143,17 @@ QueryHandler: CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o
 QueryHandler: CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o
 QueryHandler: CMakeFiles/QueryHandler.dir/build.make
 QueryHandler: /usr/lib/x86_64-linux-gnu/libmpfr.so
-QueryHandler: /usr/local/lib/libgmp.so
-QueryHandler: /usr/local/lib/libCGAL.so.13.0.0
-QueryHandler: /usr/local/lib/libboost_thread.so
-QueryHandler: /usr/local/lib/libboost_system.so
+QueryHandler: /usr/lib/x86_64-linux-gnu/libgmp.so
+QueryHandler: /usr/lib/x86_64-linux-gnu/libCGAL.so.11.0.1
+QueryHandler: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+QueryHandler: /usr/lib/x86_64-linux-gnu/libboost_system.so
 QueryHandler: /usr/lib/x86_64-linux-gnu/libpthread.so
-QueryHandler: /usr/local/lib/libCGAL.so.13.0.0
-QueryHandler: /usr/local/lib/libboost_thread.so
-QueryHandler: /usr/local/lib/libboost_system.so
+QueryHandler: /usr/lib/x86_64-linux-gnu/libCGAL.so.11.0.1
+QueryHandler: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+QueryHandler: /usr/lib/x86_64-linux-gnu/libboost_system.so
 QueryHandler: /usr/lib/x86_64-linux-gnu/libpthread.so
 QueryHandler: CMakeFiles/QueryHandler.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable QueryHandler"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable QueryHandler"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/QueryHandler.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -172,6 +172,6 @@ CMakeFiles/QueryHandler.dir/clean:
 .PHONY : CMakeFiles/QueryHandler.dir/clean
 
 CMakeFiles/QueryHandler.dir/depend:
-	cd "/home/amir/Documents/CS Masters/Robotics/HW3" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3" "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/QueryHandler.dir/DependInfo.cmake" --color=$(COLOR)
+	cd /home/nitai/documents/courses/robotics/workspace/hw3 && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3 /home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/QueryHandler.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/QueryHandler.dir/depend
 

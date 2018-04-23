@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/amir/Documents/CS Masters/Robotics/HW3/MyQueryHandler.cpp" "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o"
-  "/home/amir/Documents/CS Masters/Robotics/HW3/NaiveQueryHandler.cpp" "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o"
-  "/home/amir/Documents/CS Masters/Robotics/HW3/QueryHandler.cpp" "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o"
+  "/home/nitai/documents/courses/robotics/workspace/hw3/MyQueryHandler.cpp" "/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/QueryHandler.dir/MyQueryHandler.cpp.o"
+  "/home/nitai/documents/courses/robotics/workspace/hw3/NaiveQueryHandler.cpp" "/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/QueryHandler.dir/NaiveQueryHandler.cpp.o"
+  "/home/nitai/documents/courses/robotics/workspace/hw3/QueryHandler.cpp" "/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/QueryHandler.dir/QueryHandler.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -18,7 +18,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/local/include"
+  "/usr/include/x86_64-linux-gnu"
   "."
   )
 

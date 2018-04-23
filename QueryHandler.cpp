@@ -27,7 +27,7 @@ void getObstacles(vector<Polygon_2> &obstacles) {
             p.push_back({x, y});
         }
         if (p.is_clockwise_oriented()) p.reverse_orientation();
-        obstacles.emplace_back(move(p));
+        obstacles.emplace_back(std::move(p));
     }
 }
 

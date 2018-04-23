@@ -48,3 +48,9 @@ add_to_cached_list(CGAL_EXECUTABLE_TARGETS RodPathFinder)
 # Link the executable to CGAL and third-party libraries
 target_link_libraries(QueryHandler ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES})
 target_link_libraries(RodPathFinder ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES})
+<<<<<<< Updated upstream
+=======
+
+TARGET_LINK_LIBRARIES(QueryHandler ${ITK_LIBRARIES})
+TARGET_LINK_LIBRARIES(RodPathFinder ${ITK_LIBRARIES})
+>>>>>>> Stashed changes

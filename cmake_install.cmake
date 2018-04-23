@@ -1,4 +1,4 @@
-# Install script for directory: /home/amir/Documents/CS Masters/Robotics/HW3
+# Install script for directory: /home/nitai/documents/courses/robotics/workspace/hw3
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/amir/Documents/CS Masters/Robotics/HW3/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/nitai/documents/courses/robotics/workspace/hw3/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

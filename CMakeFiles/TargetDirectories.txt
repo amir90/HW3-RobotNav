@@ -1,4 +1,4 @@
-/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/rebuild_cache.dir
-/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/edit_cache.dir
-/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/RodPathFinder.dir
-/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles/QueryHandler.dir
+/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/rebuild_cache.dir
+/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/edit_cache.dir
+/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/RodPathFinder.dir
+/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles/QueryHandler.dir

@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/amir/Documents/CS Masters/Robotics/HW3"
+CMAKE_SOURCE_DIR = /home/nitai/documents/courses/robotics/workspace/hw3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/amir/Documents/CS Masters/Robotics/HW3"
+CMAKE_BINARY_DIR = /home/nitai/documents/courses/robotics/workspace/hw3
 
 #=============================================================================
 # Target rules for target CMakeFiles/RodPathFinder.dir
@@ -66,7 +66,11 @@ CMAKE_BINARY_DIR = "/home/amir/Documents/CS Masters/Robotics/HW3"
 CMakeFiles/RodPathFinder.dir/all:
 	$(MAKE) -f CMakeFiles/RodPathFinder.dir/build.make CMakeFiles/RodPathFinder.dir/depend
 	$(MAKE) -f CMakeFiles/RodPathFinder.dir/build.make CMakeFiles/RodPathFinder.dir/build
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=5,6,7,8,9,10 "Built target RodPathFinder"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=5,6,7,8,9 "Built target RodPathFinder"
+>>>>>>> Stashed changes
 .PHONY : CMakeFiles/RodPathFinder.dir/all
 
 # Include target in all.
@@ -76,9 +80,13 @@ all: CMakeFiles/RodPathFinder.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/RodPathFinder.dir/rule: cmake_check_build_system
+<<<<<<< Updated upstream
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" 6
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles 5
+>>>>>>> Stashed changes
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/RodPathFinder.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles 0
 .PHONY : CMakeFiles/RodPathFinder.dir/rule
 
 # Convenience name for target.
@@ -103,7 +111,7 @@ clean: CMakeFiles/RodPathFinder.dir/clean
 CMakeFiles/QueryHandler.dir/all:
 	$(MAKE) -f CMakeFiles/QueryHandler.dir/build.make CMakeFiles/QueryHandler.dir/depend
 	$(MAKE) -f CMakeFiles/QueryHandler.dir/build.make CMakeFiles/QueryHandler.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" --progress-num=1,2,3,4 "Built target QueryHandler"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles --progress-num=1,2,3,4 "Built target QueryHandler"
 .PHONY : CMakeFiles/QueryHandler.dir/all
 
 # Include target in all.
@@ -113,9 +121,9 @@ all: CMakeFiles/QueryHandler.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/QueryHandler.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/QueryHandler.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/amir/Documents/CS Masters/Robotics/HW3/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/documents/courses/robotics/workspace/hw3/CMakeFiles 0
 .PHONY : CMakeFiles/QueryHandler.dir/rule
 
 # Convenience name for target.

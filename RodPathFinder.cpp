@@ -30,7 +30,7 @@ void getObstacles(vector<Polygon_2> &obstacles) {
             cin >> x >> y;
             p.push_back({x, y});
         }
-        obstacles.push_back(move(p));
+        obstacles.push_back(std::move(p));
     }
 }
 
