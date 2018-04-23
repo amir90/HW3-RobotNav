@@ -8,6 +8,8 @@
 #include <vector>
 #include "CGAL_defines.h"
 #include "Path.h"
+#include <CGAL/Bbox_2.h>
+#include <math.h>
 
 using namespace std;
 
@@ -16,6 +18,8 @@ public:
     vector<Path::PathMovement>
     getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRotation, Point_2 rodEndPoint, double rodEndRotation,
             vector<Polygon_2> obstacles);
+
+
 };
 
 

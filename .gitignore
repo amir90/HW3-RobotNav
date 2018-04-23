@@ -6,3 +6,5 @@ CMakeFiles/
 /Makefile
 /RodPathFinder
 /QueryHandler
+.project
+.cproject

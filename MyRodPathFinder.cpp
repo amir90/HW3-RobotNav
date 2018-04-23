@@ -5,17 +5,44 @@
 #include "MyRodPathFinder.h"
 #include "MyQueryHandler.h"
 
+#define STEPS 50
+
 struct qPoint {
 	Point_2 xy;
 	double rotation;
 	int index;
 };
 
+struct range {
+	int start;
+	int end;
+};
+
+bool legal_range(range r) {
+	return r.start <= r.end;
+}
+
+double rand_between(double high, double low) {
+	return low + static_cast <double> (rand()) /( static_cast <double> (RAND_MAX/(high-low)));
+}
+
+qPoint newRandomQPoint(double xmin, double xmax, double ymin, double ymax) {
+	double x = rand_between(xmin,xmax);
+	double y = rand_between(ymin, ymax);
+	double rotation = rand_between(0,2*CGAL_PI);
+
+	qPoint p;
+	p.xy = Point_2(x,y);
+	p.rotation = rotation;
+
+	return p;
+
+}
 
 double	dist(qPoint p1, qPoint p3) {
 	//TODO: implement distance function
-	wt = 0.5;
-	wf = 0.5;
+	double wt = 0.5;
+	double wf = 0.5;
 	return 0;
 }
 
@@ -33,33 +60,67 @@ bool operator()(const qPoint &a ,const qPoint &b) {
 qPoint i;
 };
 
-bool localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
-	//incremental implementation
-	steps = 50;
-	bool breakflag = false;
-	for (i=1; i<steps; i++) {
-
-		if (!handler.isLegalConfiguration(q1.xy+((i/50)*q2.xy-CGAL::ORIGIN),(q1.rotation+(q2.rotation-q1.rotation)*i/50)) % (2*3.14)) {
-			breakflag = true;
-			break;
-		}
-	}
-
-		if (!breakflag) return 1; //Counterclockwise rotation
-
-		breakflag = false;
-
-	for (i=1; i<steps; i++) {
-
-		if (!handler.isLegalConfiguration(q1.xy+((i/50)*q2.xy-CGAL::ORIGIN),q2.rotation+(q1.rotation-q2.rotation)*i/50)) {
-			break;
-		}
-	}
-	if (!breakflag) return -1; //clockwise rotation
-
-	return 0;
-
+// fix to range [0, 2pi)
+double fixedAngle(double angle) {
+	return fmod(angle, CGAL_PI) + CGAL_PI;
 }
+
+qPoint getPointAtStep(int i, qPoint q1, qPoint q2, bool isClockwise) {
+	qPoint q;
+	double cwRotation = fixedAngle(q1.rotation + (q1.rotation-q2.rotation)*i/STEPS);
+	double ccwRotation = fixedAngle(q1.rotation+ (q2.rotation-q1.rotation)*i/STEPS);
+
+	q.xy = q1.xy+((i/50)*q2.xy-CGAL::ORIGIN);
+	q.rotation = (isClockwise ? cwRotation : ccwRotation);
+
+	return q;
+}
+
+bool localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
+	int countDirection = 0;
+
+	while(countDirection < 2) {
+		bool isClockwise = countDirection == 0;
+		int collides = false;
+
+		queue<range *> q;
+
+		range r;
+		r.start = 1;
+		r.end = STEPS - 1;
+
+		q.push(&r);
+
+		while(!q.empty()) {
+			range* r = q.pop();
+			int mid = (r->end + r->start) / 2;
+			qPoint qMid = getPointAtStep(mid, q1, q2, isClockwise);
+			if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
+				collides = true;
+				break;
+			}
+
+			// push to queue new ranges
+
+			range left, right;
+			left.start = r->start;
+			left.end = mid-1;
+			right.start = mid+1;
+			right.end = r-> end;
+
+			if(legal_range(left))
+				q.push(&left);
+			if(legal_range(right))
+				q.push(&right);
+		}
+
+		if(!collides)
+			return true;
+	}
+
+	return false;
+}
+
 
 vector<Path::PathMovement>
 MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRotation, Point_2 rodEndPoint,
@@ -74,15 +135,20 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	int graph[n][n]; //matrix representation of the graph
 
 	MyQueryHandler queryHandler(rodLength,obstacles);
+	
+	CGAL::Bbox_2 bbox(queryHandler.arr.vertices_begin(),queryHandler.arr.vertices_end());
+
+	float bsr = 1.1;
+	double xmin = bbox.xmin()*bsr, xmax = bbox.xmax()*bsr, 
+	ymin = bbox.ymin()*bsr, ymax = bbox.ymax()*bsr;
 
 	int currInd = 0;
 	int counter = 0;
 
 	while (currInd<n && counter<timeout ) {
 
-		qPoint temp;
-		//TODO: get random qPoint for temp;
-		queryHandler.isLegalConfiguration(Point_2(temp.x(),temp.y()),temp.z().to_double());
+		qPoint temp = newRandomQPoint(xmin, xmax, ymin, ymax); 
+		queryHandler.isLegalConfiguration(temp.xy,temp.rotation);
 		V[currInd] = temp;
 		currInd++;
 	}
