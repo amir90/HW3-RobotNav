@@ -6,7 +6,7 @@
 #include "MyQueryHandler.h"
 
 #define STEPS 50
-#define N 10
+#define N 100
 #define K 5
 #define TIMEOUT 1000
 #define TRANSLATION_WEIGHT 0.8
@@ -58,14 +58,19 @@ double dist_1(qPoint p1, qPoint p2) {
 	FT sDist = CGAL::squared_distance(s1, s2);
 	FT dDist = CGAL::squared_distance(t1, t2);
 
-	return (sDist.to_double() + dDist.to_double())/2;
+	return sDist.to_double() + dDist.to_double();
 }
 
-double dist_2(qPoint p1, qPoint p2, bool isClockwise) {
+double dist_2(qPoint p1, qPoint p2, bool isClockwise,double rodLength) {
 	double tw = TRANSLATION_WEIGHT;
 	double rw = 1 - tw;
 	double t_dist = CGAL::squared_distance(p1.xy, p2.xy).to_double();
-	double r_dist = (p2.rotation - p1.rotation) * (isClockwise ? -1 : 1);
+	double r_dist = (p1.rotation - p2.rotation);// * (isClockwise ? -1 : 1);
+	if (isClockwise) {
+		r_dist = (r_dist>=0?r_dist:r_dist+2*CGAL_PI)*rodLength;
+	} else {
+		r_dist = (r_dist<0?-r_dist:r_dist+2*CGAL_PI)*rodLength;
+	}
 	return tw * t_dist + rw * r_dist;
 }
 
@@ -93,13 +98,18 @@ struct setComp{
 
 // fix to range [0, 2pi)
 double fixedAngle(double angle) {
-	return fmod(angle, CGAL_PI) + CGAL_PI;
+	return fmod(angle, CGAL_PI);
 }
 
 qPoint getPointAtStep(int i, qPoint q1, qPoint q2, bool isClockwise) {
 	qPoint q;
-	double cwRotation = fixedAngle(q1.rotation + (q1.rotation-q2.rotation)*i/STEPS);
-	double ccwRotation = fixedAngle(q1.rotation+ (q2.rotation-q1.rotation)*i/STEPS);
+	//double cwRotation = fixedAngle(q1.rotation + (q2.rotation-q1.rotation)*i/STEPS);
+	//double ccwRotation = fixedAngle(q1.rotation+ (q2.rotation-q1.rotation)*i/STEPS);
+
+	double ccwRotation = q2.rotation-q1.rotation>=0?q2.rotation-q1.rotation:q2.rotation-q1.rotation+2*CGAL_PI;
+	ccwRotation = fixedAngle(q1.rotation+ccwRotation*i/50);
+	double cwRotation = q2.rotation-q1.rotation>=0?-(2*CGAL_PI-(q2.rotation-q1.rotation)):q2.rotation-q1.rotation;
+		cwRotation = fixedAngle(q1.rotation+cwRotation*i/50);
 
 	double x1 = q1.xy.x().to_double(), y1 = q1.xy.y().to_double(),
 			x2 = q2.xy.x().to_double(), y2 = q2.xy.y().to_double();
@@ -113,6 +123,7 @@ qPoint getPointAtStep(int i, qPoint q1, qPoint q2, bool isClockwise) {
 }
 
 int minDistance(double* dist, bool* sptSet, int V)
+//for Dijkstra
 {
    // Initialize min value
    double min = numeric_limits<double>::max();
@@ -195,8 +206,8 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 	double d[2] = {max_double, max_double};
 
 	for(int countDirection = 0; countDirection < 2; countDirection++) {
-		bool isClockwise = countDirection == 0;
-		int collides = false;
+		bool isClockwise = countDirection;
+		bool collides = false;
 
 		queue<range *> q;
 
@@ -238,8 +249,8 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 	if(d[0] == d[1] == max_double)
 		return 2;
 
-	// clockwise is a valid route that is neccessarily shorter that cc
-	if(d[0] < d[1])
+	// clockwise is a valid route that is neccessarily shorter than cc
+	if(d[0] < d[1] && d[1]!=max_double)
 		return 1;
 
 	return -1;
@@ -247,15 +258,18 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 
 short getDirection(short direction[N][N], qPoint q1, qPoint q2, MyQueryHandler handler) {
 	// route validation and direction was not found before
-	cout << "q1.index " << q1.index << endl;
-	cout << "q2.index " << q2.index << endl;
+//	cout << "q1.index " << q1.index << endl;
+//	cout << "q2.index " << q2.index << endl;
 	//route was not found before
 	if(direction[q1.index][q2.index] == 0) {
-		cout << "DEBUG3" << endl;
+	//	cout << "DEBUG3" << endl;
 		direction[q1.index][q2.index] = localPlanner(q1, q2, handler);
-		cout << "DEBUG4" << endl;
+	//	cout << "DEBUG4" << endl;
 		//some route was found - add symmetrical movement
 		if(direction[q1.index][q2.index] != 2)
+			if (q1.index==0 && q2.index==1) {
+				std::cout<<"Bad!";
+			}
 			direction[q2.index][q1.index] = -direction[q1.index][q2.index];
 	}
 
@@ -323,10 +337,10 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	    for (qPoint q1: V) {
 	    	Neighbor n;
 	    	n.p = q1;
-	    	cout <<"Amir index:"<<q1.index<<endl;
-    		cout << "DEBUG1" << endl;
+	    //	cout <<"Amir index:"<<q1.index<<endl;
+    		//cout << "DEBUG1" << endl;
 	    	if (neighbours.size() <  K) {
-	    		cout << "DEBUG2" << endl;
+	    	//	cout << "DEBUG2" << endl;
 	    		short dir = getDirection(direction,q, q1, queryHandler);
 
 	    		// insert only if route is valid
@@ -363,12 +377,12 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	vector<int> path = dijkstra(graph, N, /*index of source*/0, /*index of target*/1);
 
 	// TODO : check if should include last step
-	for(int i=1; i<path.size(); i++) {
+	for(int i=0; i<path.size(); i++) {
 		Path::PathMovement movement;
-		movement.location = V[i].xy;
-		movement.rotation = V[i].rotation;
+		movement.location = V[path[i]].xy;
+		movement.rotation = V[path[i]].rotation;
 		movement.orientation =
-				( direction[V[i-1].index][V[i].index] == 1 ?
+				( direction[V[path[i-1]].index][V[path[i]].index] == 1 ?
 						CGAL::CLOCKWISE :
 						CGAL::COUNTERCLOCKWISE);
 
