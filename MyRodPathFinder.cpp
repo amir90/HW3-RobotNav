@@ -249,10 +249,12 @@ short getDirection(short direction[N][N], qPoint q1, qPoint q2, MyQueryHandler h
 	// route validation and direction was not found before
 	cout << "q1.index " << q1.index << endl;
 	cout << "q2.index " << q2.index << endl;
+	//route was not found before
 	if(direction[q1.index][q2.index] == 0) {
 		cout << "DEBUG3" << endl;
 		direction[q1.index][q2.index] = localPlanner(q1, q2, handler);
 		cout << "DEBUG4" << endl;
+		//some route was found - add symmetrical movement
 		if(direction[q1.index][q2.index] != 2)
 			direction[q2.index][q1.index] = -direction[q1.index][q2.index];
 	}
@@ -283,6 +285,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	double xmin = bbox.xmin()*bsr, xmax = bbox.xmax()*bsr, 
 	ymin = bbox.ymin()*bsr, ymax = bbox.ymax()*bsr;
 
+	//wrong - the start point is not supposed to be part of the roadmap
 	qPoint qstart, qend;
 	qstart.xy = rodStartPoint;
 	qstart.rotation = rodStartRotation;
@@ -301,9 +304,10 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 		qPoint temp = newRandomQPoint(xmin, xmax, ymin, ymax); 
 		if(queryHandler.isLegalConfiguration(temp.xy,temp.rotation)) {
-			V[currInd] = temp;
 			temp.index = currInd;
+			V[currInd] = temp;
 			currInd++;
+			counter=0;
 		}
 
 		counter++;
@@ -319,6 +323,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	    for (qPoint q1: V) {
 	    	Neighbor n;
 	    	n.p = q1;
+	    	cout <<"Amir index:"<<q1.index<<endl;
     		cout << "DEBUG1" << endl;
 	    	if (neighbours.size() <  K) {
 	    		cout << "DEBUG2" << endl;
@@ -333,16 +338,16 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	      }
 	    	// q1 is suspected to be close enough - still need to validate route and direction
-	    	else if ( dist_min(q1,q) < (--neighbours.end())->distance) {
+	    	else if ( dist_min(q1,q) < (std::next(neighbours.end(),-1))->distance) {
 			  short dir = getDirection(direction, q, q1, queryHandler);
 
 			  // insert only if route is valid
 			  if(dir != 2) {
 				  n.isClockwise = (dir == 1);
 				  n.distance = dist(q, q1, n.isClockwise);
-				  if(n.distance < (--neighbours.end())->distance) {
+				  if(n.distance < (std::next(neighbours.end(),-1))->distance) {
 					  neighbours.insert(n);
-					  neighbours.erase(--neighbours.end());
+					  neighbours.erase(std::next(neighbours.end(),-1));
 				  }
 			  }
 		  }
