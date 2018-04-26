@@ -5,9 +5,9 @@
 #include "MyRodPathFinder.h"
 #include "MyQueryHandler.h"
 
-#define STEPS 50
-#define N 20
-#define K 5
+#define STEPS 64
+#define N 100
+#define K 20
 #define TIMEOUT 1000
 #define TRANSLATION_WEIGHT 0.8
 
@@ -101,20 +101,20 @@ double fixedAngle(double angle) {
 	return fmod(angle, CGAL_PI);
 }
 
-qPoint getPointAtStep(int i, qPoint q1, qPoint q2, bool isClockwise) {
+qPoint getPointAtStep(double i, qPoint q1, qPoint q2, bool isClockwise) {
 	qPoint q;
 	//double cwRotation = fixedAngle(q1.rotation + (q2.rotation-q1.rotation)*i/STEPS);
 	//double ccwRotation = fixedAngle(q1.rotation+ (q2.rotation-q1.rotation)*i/STEPS);
 
 	double ccwRotation = q2.rotation-q1.rotation>=0?q2.rotation-q1.rotation:q2.rotation-q1.rotation+2*CGAL_PI;
-	ccwRotation = fixedAngle(q1.rotation+ccwRotation*i/50);
+	ccwRotation = fixedAngle(q1.rotation+ccwRotation*i);
 	double cwRotation = q2.rotation-q1.rotation>=0?-(2*CGAL_PI-(q2.rotation-q1.rotation)):q2.rotation-q1.rotation;
-		cwRotation = fixedAngle(q1.rotation+cwRotation*i/50);
+		cwRotation = fixedAngle(q1.rotation+cwRotation*i);
 
 	double x1 = q1.xy.x().to_double(), y1 = q1.xy.y().to_double(),
 			x2 = q2.xy.x().to_double(), y2 = q2.xy.y().to_double();
-	double x = x1 + (i/50.0) * (x2-x1),
-			y = y1 + (i/50.0) * (y2-y1);
+	double x = x1 + (i) * (x2-x1),
+			y = y1 + (i) * (y2-y1);
 
 	q.xy = Point_2(x,y);
 	q.rotation = (isClockwise ? cwRotation : ccwRotation);
@@ -203,45 +203,50 @@ vector<int> dijkstra(double graph[N][N], int V, int src, int target)
  */
 
 double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
+//TODO: not implemented well. change implementation:
+//make STEPS a power of two. scan one point (middle) for STEPS/2, two points for STEPS/4, and so forth.
+//No queue needed.
 
 	double d[2] = {-1, -1};
 	for(int countDirection = 0; countDirection < 2; countDirection++) {
 		bool isClockwise = countDirection;
 		bool collides = false;
-
+/*
 		queue<range> q;
 
 		range r;
 		r.start = 1;
 		r.end = STEPS - 1;
-
 		q.push(r);
+*/
+		int currStepSize = 2;
 
-		while(!q.empty()) {
-			range r = q.front();
-			if (q1.index==0 && q2.index==1) {
-				std::cout<<"local planner: start "<<r.start<<" local planner: end "<<r.end<<endl;
-			}
-			q.pop();
-			int mid = (r.end + r.start) / 2;
-			qPoint qMid = getPointAtStep(mid, q1, q2, isClockwise);
-			if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
-				collides = true;
-				break;
+		while(currStepSize!=STEPS && !collides) {
+			for (int i = 1; i<currStepSize; i++) {
+	//		range r = q.front();
+		//	q.pop();
+		//	int mid = (r.end + r.start) / 2;
+			qPoint qMid = getPointAtStep((double)i/currStepSize, q1, q2, isClockwise);
+				if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
+					collides = true;
+					break;
+				}
 			}
 
+			currStepSize=currStepSize*2;
 			// push to queue new ranges
-
+/*
 			range left, right;
 			left.start = r.start;
-			left.end = mid-1;
-			right.start = mid+1;
+			//left.end = mid-1;
+			//right.start = mid+1;
 			right.end = r.end;
 
 			if(legal_range(left))
 				q.push(left);
 			if(legal_range(right))
 				q.push(right);
+				*/
 		}
 
 		if(!collides)
@@ -276,11 +281,18 @@ short getDirection(short direction[N][N], qPoint q1, qPoint q2, MyQueryHandler h
 		direction[q1.index][q2.index] = localPlanner(q1, q2, handler);
 	//	cout << "DEBUG4" << endl;
 		//some route was found - add symmetrical movement
-		if(direction[q1.index][q2.index] != 2)
+		/*
+		if(direction[q1.index][q2.index] != 2) {
 			if (q1.index==0 && q2.index==1) {
 				std::cout<<"Bad!";
 			}
+			//does nothing
 			direction[q2.index][q1.index] = -direction[q1.index][q2.index];
+		} else {
+			//does nothing
+			direction[q2.index][q1.index]=2;
+		}
+		*/
 	}
 
 	return direction[q1.index][q2.index];
@@ -297,7 +309,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 //	int timeout = 1000;
 	qPoint V[N]; //Vertices;
 
-	double graph[N][N]; //matrix representation of the graph
+	double graph[N][N] = {numeric_limits<double>::max()}; //matrix representation of the graph
 
 	MyQueryHandler queryHandler(rodLength,obstacles);
 	
@@ -340,9 +352,10 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	// 0 - default, 1 - clockwise is best(/only option), (-1) - cc, 2 - no route
 	short direction[N][N] = {0};
 
+
+	//TODO:: not efficient - convert to KD tree
 	for (qPoint q: V ) {
 	    std::set<Neighbor,setComp> neighbours{setComp{}};
-
 
 	    for (qPoint q1: V) {
 	    	Neighbor n;
