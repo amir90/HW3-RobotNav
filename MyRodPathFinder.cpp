@@ -6,7 +6,7 @@
 #include "MyQueryHandler.h"
 
 #define STEPS 50
-#define N 100
+#define N 20
 #define K 5
 #define TIMEOUT 1000
 #define TRANSLATION_WEIGHT 0.8
@@ -113,8 +113,8 @@ qPoint getPointAtStep(int i, qPoint q1, qPoint q2, bool isClockwise) {
 
 	double x1 = q1.xy.x().to_double(), y1 = q1.xy.y().to_double(),
 			x2 = q2.xy.x().to_double(), y2 = q2.xy.y().to_double();
-	double x = x1 + (i/50.0) * x2,
-			y = y1 + (i/50.0) * y2;
+	double x = x1 + (i/50.0) * (x2-x1),
+			y = y1 + (i/50.0) * (y2-y1);
 
 	q.xy = Point_2(x,y);
 	q.rotation = (isClockwise ? cwRotation : ccwRotation);
@@ -201,26 +201,29 @@ vector<int> dijkstra(double graph[N][N], int V, int src, int target)
  * -1 - counter-clockwise route
  * 2 - no route
  */
-double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
-	double max_double = numeric_limits<double>::max();
-	double d[2] = {max_double, max_double};
 
+double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
+
+	double d[2] = {-1, -1};
 	for(int countDirection = 0; countDirection < 2; countDirection++) {
 		bool isClockwise = countDirection;
 		bool collides = false;
 
-		queue<range *> q;
+		queue<range> q;
 
 		range r;
 		r.start = 1;
 		r.end = STEPS - 1;
 
-		q.push(&r);
+		q.push(r);
 
 		while(!q.empty()) {
-			range* r = q.front();
+			range r = q.front();
+			if (q1.index==0 && q2.index==1) {
+				std::cout<<"local planner: start "<<r.start<<" local planner: end "<<r.end<<endl;
+			}
 			q.pop();
-			int mid = (r->end + r->start) / 2;
+			int mid = (r.end + r.start) / 2;
 			qPoint qMid = getPointAtStep(mid, q1, q2, isClockwise);
 			if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
 				collides = true;
@@ -230,15 +233,15 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 			// push to queue new ranges
 
 			range left, right;
-			left.start = r->start;
+			left.start = r.start;
 			left.end = mid-1;
 			right.start = mid+1;
-			right.end = r-> end;
+			right.end = r.end;
 
 			if(legal_range(left))
-				q.push(&left);
+				q.push(left);
 			if(legal_range(right))
-				q.push(&right);
+				q.push(right);
 		}
 
 		if(!collides)
@@ -246,14 +249,21 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 	}
 
 	// no route
-	if(d[0] == d[1] == max_double)
+	if(d[0]<0 && d[1]<0) {
+		if (q1.index==0 && q2.index==1) {
+			std::cout<<"d[0] "<<d[0]<<" d[1] "<<d[1]<<endl;
+		}
 		return 2;
+	}
 
 	// clockwise is a valid route that is neccessarily shorter than cc
-	if(d[0] < d[1] && d[1]!=max_double)
+	if(d[0] < d[1] && (d[1]>=0 && d[0]>=0) || (d[0]>=0 && d[1]<0)) {
+		if (q1.index==0 && q2.index==1) {
+		std::cout<<"BAD PATH!"<<d[1]<<endl;
+		}
 		return 1;
-
-	return -1;
+	}
+		return -1;
 }
 
 short getDirection(short direction[N][N], qPoint q1, qPoint q2, MyQueryHandler handler) {
@@ -371,6 +381,14 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	    	graph[q.index][n.p.index] = n.distance;
 	    	graph[n.p.index][q.index] = n.distance;
 	    }
+	}
+
+
+	for (int i=0; i<N; i++) {
+		for (int j=0; j<N; j++) {
+			cout<<graph[i][j]<<" ";
+		}
+		cout<<endl;
 	}
 
 
