@@ -5,7 +5,7 @@
 #include "MyRodPathFinder.h"
 #include "MyQueryHandler.h"
 
-#define STEPS 64
+#define STEPS 128
 #define N 100
 #define K 20
 #define TIMEOUT 1000
@@ -15,18 +15,31 @@ struct qPoint {
 	Point_2 xy;
 	double rotation;
 	int index;
+	double vec[3];
+
+	void getPoint(double x, double y) {
+		xy = Point_2(x,y);
+		vec[0]=x;
+		vec[1]=y;
+	}
+
+	  bool operator==(const qPoint& p) const
+	  {
+	    return (index==p.index)  ;
+	  }
+	  bool  operator!=(const qPoint& p) const { return ! (*this == p); }
 };
 
-struct range {
-	int start;
-	int end;
+struct Construct_coord_iterator {
+  typedef  const double* result_type;
+  const double* operator()(const qPoint& p) const
+  { return static_cast<const double*>(p.vec); }
+  const double* operator()(const qPoint& p, int)  const
+  { return static_cast<const double*>(p.vec+3); }
 };
 
 FT globalRodLength;
 
-bool legal_range(range r) {
-	return r.start <= r.end;
-}
 
 double rand_between(double high, double low) {
 	return low + static_cast <double> (rand()) /( static_cast <double> (RAND_MAX/(high-low)));
@@ -38,9 +51,9 @@ qPoint newRandomQPoint(double xmin, double xmax, double ymin, double ymax) {
 	double rotation = rand_between(0,2*CGAL_PI);
 
 	qPoint p;
-	p.xy = Point_2(x,y);
+	p.getPoint(x,y);
 	p.rotation = rotation;
-
+	p.vec[2] = rotation;
 	return p;
 }
 
@@ -180,7 +193,6 @@ vector<int> dijkstra(double graph[N][N], int V, int src, int target)
 
 	int vertex = target;
 	while(vertex != -1) {
-		cout << " path " << vertex << endl;
 		path.insert(path.begin(), vertex);
 		vertex = prev[vertex];
 	}
@@ -203,29 +215,16 @@ vector<int> dijkstra(double graph[N][N], int V, int src, int target)
  */
 
 double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
-//TODO: not implemented well. change implementation:
-//make STEPS a power of two. scan one point (middle) for STEPS/2, two points for STEPS/4, and so forth.
-//No queue needed.
 
 	double d[2] = {-1, -1};
 	for(int countDirection = 0; countDirection < 2; countDirection++) {
 		bool isClockwise = countDirection;
 		bool collides = false;
-/*
-		queue<range> q;
 
-		range r;
-		r.start = 1;
-		r.end = STEPS - 1;
-		q.push(r);
-*/
 		int currStepSize = 2;
 
 		while(currStepSize!=STEPS && !collides) {
 			for (int i = 1; i<currStepSize; i++) {
-	//		range r = q.front();
-		//	q.pop();
-		//	int mid = (r.end + r.start) / 2;
 			qPoint qMid = getPointAtStep((double)i/currStepSize, q1, q2, isClockwise);
 				if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
 					collides = true;
@@ -234,19 +233,6 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 			}
 
 			currStepSize=currStepSize*2;
-			// push to queue new ranges
-/*
-			range left, right;
-			left.start = r.start;
-			//left.end = mid-1;
-			//right.start = mid+1;
-			right.end = r.end;
-
-			if(legal_range(left))
-				q.push(left);
-			if(legal_range(right))
-				q.push(right);
-				*/
 		}
 
 		if(!collides)
@@ -255,48 +241,114 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 
 	// no route
 	if(d[0]<0 && d[1]<0) {
-		if (q1.index==0 && q2.index==1) {
-			std::cout<<"d[0] "<<d[0]<<" d[1] "<<d[1]<<endl;
-		}
 		return 2;
 	}
 
 	// clockwise is a valid route that is neccessarily shorter than cc
 	if(d[0] < d[1] && (d[1]>=0 && d[0]>=0) || (d[0]>=0 && d[1]<0)) {
-		if (q1.index==0 && q2.index==1) {
-		std::cout<<"BAD PATH!"<<d[1]<<endl;
-		}
 		return 1;
 	}
 		return -1;
 }
 
 short getDirection(short direction[N][N], qPoint q1, qPoint q2, MyQueryHandler handler) {
-	// route validation and direction was not found before
-//	cout << "q1.index " << q1.index << endl;
-//	cout << "q2.index " << q2.index << endl;
-	//route was not found before
 	if(direction[q1.index][q2.index] == 0) {
-	//	cout << "DEBUG3" << endl;
 		direction[q1.index][q2.index] = localPlanner(q1, q2, handler);
-	//	cout << "DEBUG4" << endl;
-		//some route was found - add symmetrical movement
-		/*
-		if(direction[q1.index][q2.index] != 2) {
-			if (q1.index==0 && q2.index==1) {
-				std::cout<<"Bad!";
-			}
-			//does nothing
-			direction[q2.index][q1.index] = -direction[q1.index][q2.index];
-		} else {
-			//does nothing
-			direction[q2.index][q1.index]=2;
-		}
-		*/
 	}
-
 	return direction[q1.index][q2.index];
 }
+
+struct Distance {
+  typedef qPoint Query_item;
+  typedef double FT;
+  typedef CGAL::Dimension_tag<3> D;
+  double transformed_distance(const qPoint& p1, const qPoint& p2) const {
+    return dist_min(p1,p2);
+  }
+  double min_distance_to_rectangle(const qPoint& p,
+                   const CGAL::Kd_tree_rectangle<FT,D>& b) const {
+    double distance(0.0), h = p.xy.x().to_double();
+    if (h < b.min_coord(0)) distance += (b.min_coord(0)-h)*(b.min_coord(0)-h);
+    if (h > b.max_coord(0)) distance += (h-b.max_coord(0))*(h-b.max_coord(0));
+    h=p.xy.y().to_double();
+    if (h < b.min_coord(1)) distance += (b.min_coord(1)-h)*(b.min_coord(1)-h);
+    if (h > b.max_coord(1)) distance += (h-b.max_coord(1))*(h-b.min_coord(1));
+    h=p.rotation;
+    if (h < b.min_coord(2)) distance += (b.min_coord(2)-h)*(b.min_coord(2)-h);
+    if (h > b.max_coord(2)) distance += (h-b.max_coord(2))*(h-b.max_coord(2));
+    return distance;
+  }
+  double min_distance_to_rectangle(const qPoint& p,
+                   const CGAL::Kd_tree_rectangle<FT,D>& b,std::vector<double>& dists){
+    double distance(0.0), h = p.xy.x().to_double();
+    if (h < b.min_coord(0)){
+      dists[0] = (b.min_coord(0)-h);
+      distance += dists[0]*dists[0];
+    }
+    if (h > b.max_coord(0)){
+      dists[0] = (h-b.max_coord(0));
+      distance += dists[0]*dists[0];
+    }
+    h=p.xy.y().to_double();
+    if (h < b.min_coord(1)){
+      dists[1] = (b.min_coord(1)-h);
+      distance += dists[1]*dists[1];
+    }
+    if (h > b.max_coord(1)){
+      dists[1] = (h-b.max_coord(1));
+      distance += dists[1]*dists[1];
+    }
+    h=p.rotation;
+    if (h < b.min_coord(2)){
+      dists[2] = (b.min_coord(2)-h);
+      distance += dists[2]*dists[2];
+    }
+    if (h > b.max_coord(2)){
+      dists[2] = (h-b.max_coord(2));
+      distance += dists[2]*dists[2];
+    }
+    return distance;
+  }
+  double max_distance_to_rectangle(const qPoint& p,
+                   const CGAL::Kd_tree_rectangle<FT,D>& b) const {
+    double h = p.xy.x().to_double();
+    double d0 = (h >= (b.min_coord(0)+b.max_coord(0))/2.0) ?
+                (h-b.min_coord(0))*(h-b.min_coord(0)) : (b.max_coord(0)-h)*(b.max_coord(0)-h);
+    h=p.xy.y().to_double();
+    double d1 = (h >= (b.min_coord(1)+b.max_coord(1))/2.0) ?
+                (h-b.min_coord(1))*(h-b.min_coord(1)) : (b.max_coord(1)-h)*(b.max_coord(1)-h);
+    h=p.rotation;
+    double d2 = (h >= (b.min_coord(2)+b.max_coord(2))/2.0) ?
+                (h-b.min_coord(2))*(h-b.min_coord(2)) : (b.max_coord(2)-h)*(b.max_coord(2)-h);
+    return d0 + d1 + d2;
+  }
+  double max_distance_to_rectangle(const qPoint& p,
+                   const CGAL::Kd_tree_rectangle<FT,D>& b,std::vector<double>& dists){
+	double h = p.xy.x().to_double();
+    dists[0] = (h >= (b.min_coord(0)+b.max_coord(0))/2.0) ?
+                (h-b.min_coord(0)) : (b.max_coord(0)-h);
+
+    h=p.xy.y().to_double();
+    dists[1] = (h >= (b.min_coord(1)+b.max_coord(1))/2.0) ?
+                (h-b.min_coord(1)) : (b.max_coord(1)-h);
+    h=p.rotation;
+    dists[2] = (h >= (b.min_coord(2)+b.max_coord(2))/2.0) ?
+                (h-b.min_coord(2)) : (b.max_coord(2)-h);
+    return dists[0] * dists[0] + dists[1] * dists[1] + dists[2] * dists[2];
+  }
+  double new_distance(double& dist, double old_off, double new_off,
+              int /* cutting_dimension */)  const {
+    return dist + new_off*new_off - old_off*old_off;
+  }
+  double transformed_distance(double d) const { return d*d; }
+  double inverse_of_transformed_distance(double d) { return std::sqrt(d); }
+}; // end of struct Distance
+
+
+typedef CGAL::Dimension_tag<3> D;
+typedef CGAL::Search_traits<double, qPoint, const double*, Construct_coord_iterator, D> Traits;
+typedef CGAL::Orthogonal_k_neighbor_search<Traits, Distance> K_neighbor_search;
+typedef K_neighbor_search::Tree Tree;
 
 
 vector<Path::PathMovement>
@@ -315,13 +367,29 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	
 
 	//TODO : find solution
-	CGAL::Bbox_2 bbox(10, -10, 10, -10);
+//	CGAL::Bbox_2 bbox(1, -1, 1, -1);
+
+	CGAL::Bbox_2 bbox = obstacles[0].bbox();
+
+	for (Polygon_2 p: obstacles) {
+
+		bbox = bbox+p.bbox();
+
+	}
+
+	bbox = bbox + Segment_2(rodStartPoint,rodEndPoint).bbox();
+
+	//bbox = CGAL::Bbox_2(-1,-1,1,1);
+
+	cout<<bbox.xmax()<<" "<<bbox.xmin()<<" "<<bbox.ymax()<<" "<<bbox.ymin()<<endl;
 
 	float bsr = 1.1;
-	double xmin = bbox.xmin()*bsr, xmax = bbox.xmax()*bsr, 
-	ymin = bbox.ymin()*bsr, ymax = bbox.ymax()*bsr;
+	double xmin = bbox.xmin()-bsr, xmax = bbox.xmax()+bsr,
+	ymin = bbox.ymin()-bsr, ymax = bbox.ymax()+bsr;
 
-	//wrong - the start point is not supposed to be part of the roadmap
+	cout<<xmax<<" "<<xmin<<" "<<ymax<<" "<<ymin<<endl;
+
+
 	qPoint qstart, qend;
 	qstart.xy = rodStartPoint;
 	qstart.rotation = rodStartRotation;
@@ -352,56 +420,31 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	// 0 - default, 1 - clockwise is best(/only option), (-1) - cc, 2 - no route
 	short direction[N][N] = {0};
 
+	Tree tree(V,V+N);
 
-	//TODO:: not efficient - convert to KD tree
 	for (qPoint q: V ) {
-	    std::set<Neighbor,setComp> neighbours{setComp{}};
 
-	    for (qPoint q1: V) {
+		K_neighbor_search search(tree, q, K);
+
+		for(K_neighbor_search::iterator it = search.begin(); it != search.end(); it++){
 	    	Neighbor n;
+	    	qPoint q1 = it->first;
 	    	n.p = q1;
-	    //	cout <<"Amir index:"<<q1.index<<endl;
-    		//cout << "DEBUG1" << endl;
-	    	if (neighbours.size() <  K) {
-	    	//	cout << "DEBUG2" << endl;
 	    		short dir = getDirection(direction,q, q1, queryHandler);
-
-	    		// insert only if route is valid
 	    		if(dir != 2) {
 	    			n.isClockwise = (dir == 1);
 	    			n.distance = dist(q, q1, n.isClockwise);
-	    			neighbours.insert(n);
+	    	    	direction[q.index][q1.index] = dir;
+	    	    	direction[q1.index][q.index] = -dir;
+	    	    	graph[q.index][n.p.index] = n.distance;
+	    	    	graph[n.p.index][q.index] = n.distance;
+	    		} else {
+	    	    	direction[q.index][q1.index] = 2;
+	    	    	direction[q1.index][q.index] = 2;
 	    		}
 
+
 	      }
-	    	// q1 is suspected to be close enough - still need to validate route and direction
-	    	else if ( dist_min(q1,q) < (std::next(neighbours.end(),-1))->distance) {
-			  short dir = getDirection(direction, q, q1, queryHandler);
-
-			  // insert only if route is valid
-			  if(dir != 2) {
-				  n.isClockwise = (dir == 1);
-				  n.distance = dist(q, q1, n.isClockwise);
-				  if(n.distance < (std::next(neighbours.end(),-1))->distance) {
-					  neighbours.insert(n);
-					  neighbours.erase(std::next(neighbours.end(),-1));
-				  }
-			  }
-		  }
-	    }
-
-	    for(Neighbor n : neighbours) {
-	    	graph[q.index][n.p.index] = n.distance;
-	    	graph[n.p.index][q.index] = n.distance;
-	    }
-	}
-
-
-	for (int i=0; i<N; i++) {
-		for (int j=0; j<N; j++) {
-			cout<<graph[i][j]<<" ";
-		}
-		cout<<endl;
 	}
 
 
@@ -413,7 +456,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 		movement.location = V[path[i]].xy;
 		movement.rotation = V[path[i]].rotation;
 		movement.orientation =
-				( direction[V[path[i-1]].index][V[path[i]].index] == 1 ?
+				( direction[V[path[i-1]].index][V[path[i]].index] == -1 ?
 						CGAL::CLOCKWISE :
 						CGAL::COUNTERCLOCKWISE);
 
