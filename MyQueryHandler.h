@@ -11,6 +11,7 @@
 class MyQueryHandler : public IQueryHandler {
 public:
     Arrangement_2 arr;
+    Naive_pl  naive_pl;
     MyQueryHandler(const FT &rodLength, const vector<Polygon_2> &obstacles);
 protected:
     FT myLength;
