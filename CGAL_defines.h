@@ -15,6 +15,8 @@
 #include <CGAL/Arr_segment_traits_2.h>
 #include <CGAL/Arrangement_2.h>
 #include <CGAL/Arr_extended_dcel.h>
+#include <CGAL/Search_traits.h>
+#include <CGAL/Orthogonal_k_neighbor_search.h>
 
 typedef typename CGAL::Gmpq Number_type;
 typedef typename CGAL::Cartesian<Number_type> Kernel;
