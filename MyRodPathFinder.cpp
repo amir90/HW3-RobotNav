@@ -6,9 +6,10 @@
 #include "MyQueryHandler.h"
 
 #define STEPS 64
-#define N 1000
+#define Nx 50
+#define Ny 50
 #define K 20
-#define TIMEOUT 10000
+#define TIMEOUT 100
 #define TRANSLATION_WEIGHT 0.8
 
 struct qPoint {
@@ -45,18 +46,13 @@ double rand_between(double high, double low) {
 	return low + static_cast <double> (rand()) /( static_cast <double> (RAND_MAX/(high-low)));
 }
 
-qPoint newRandomQPoint(MyQueryHandler handler, double xmin, double xmax, double ymin, double ymax) {
+qPoint newRandomQPoint(double xmin, double xmax, double ymin, double ymax) {
 	double x = rand_between(xmin,xmax);
 	double y = rand_between(ymin, ymax);
 	double rotation = rand_between(0,2*CGAL_PI);
 
 	qPoint p;
 	p.getPoint(x,y);
-
-	for(int i=0; i<100 && ! handler.isLegalConfiguration(p.xy, rotation); i++) {
-		rotation = rand_between(0,2*CGAL_PI);
-	}
-
 	p.rotation = rotation;
 	p.vec[2] = rotation;
 	return p;
@@ -231,7 +227,6 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 		while(currStepSize!=STEPS && !collides) {
 			for (int i = 1; i<currStepSize; i=i+2) {
 			qPoint qMid = getPointAtStep((double)i/currStepSize, q1, q2, isClockwise);
-		//	cout<<(double) i/currStepSize<<": "<<qMid.xy.x().to_double()<<" , "<<qMid.xy.y().to_double()<<" , "<<qMid.rotation<<endl;
 			if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
 					collides = true;
 					break;
@@ -245,8 +240,6 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 			d[countDirection] = dist(q1, q2, isClockwise);
 	}
 
-	//cout<<d[0]<<" "<<d[1]<<endl;
-
 	// no route
 	if(d[0]<0 && d[1]<0) {
 		return 2;
@@ -259,11 +252,11 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 		return -1;
 }
 
-short getDirection(short direction[N][N], qPoint q1, qPoint q2, MyQueryHandler handler) {
-	if(direction[q1.index][q2.index] == 0) {
-		direction[q1.index][q2.index] = localPlanner(q1, q2, handler);
+short getDirection(short direction, qPoint q1, qPoint q2, MyQueryHandler handler) {
+	if(direction == 0) {
+		direction = localPlanner(q1, q2, handler);
 	}
-	return direction[q1.index][q2.index];
+	return direction;
 }
 
 struct Distance {
@@ -367,11 +360,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 //	int n = 10; //number of nodes to put in the Roadmap
 //	int k = 5; //number of closest neighbors to examine for each configuration
 //	int timeout = 1000;
-	vector<qPoint> V(N); //Vertices;
-
-	vector<vector<double>> graph(N, vector<double>(N));// = {numeric_limits<double>::max()}; //matrix representation of the graph
-
-
+	vector<qPoint> V; //Vertices;
 
 	MyQueryHandler queryHandler(rodLength,obstacles);
 	
@@ -391,16 +380,9 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	//bbox = CGAL::Bbox_2(-2,-2,2,2);
 
-	cout<<bbox.xmax()<<" "<<bbox.xmin()<<" "<<bbox.ymax()<<" "<<bbox.ymin()<<endl;
-
-	float bsr = 0.05;
+	float bsr = 0.1;
 	double xmin = bbox.xmin()-bsr, xmax = bbox.xmax()+bsr,
 	ymin = bbox.ymin()-bsr, ymax = bbox.ymax()+bsr;
-
-	cout<<xmax<<" "<<xmin<<" "<<ymax<<" "<<ymin<<endl;
-
-
-	cout<<CGAL::CLOCKWISE<<endl;
 
 	qPoint qstart, qend;
 	qstart.xy = rodStartPoint;
@@ -409,32 +391,53 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	qend.xy = rodEndPoint;
 	qend.rotation = rodEndRotation;
 	qend.index = 1;
-
-	V[0] = qstart;
-	V[1] = qend;
+	V.push_back(qstart);
+	V.push_back(qend);
 
 	int currInd = 2;
-	int counter = 0;
 
-	while (currInd < N && counter < TIMEOUT ) {
 
-		qPoint temp = newRandomQPoint(queryHandler, xmin, xmax, ymin, ymax);
+	for (int i=0; i<Nx; i++) {
+		for (int j=0; j<Ny; j++) {
 
-		if(queryHandler.isLegalConfiguration(temp.xy,temp.rotation)) {
-			temp.index = currInd;
-			V[currInd] = temp;
-			currInd++;
-			counter=0;
+			int counter = 0;
+			double x = xmin+(double) i/(Nx-1)*(xmax-xmin);
+			double y = ymin+(double) j/(Ny-1)*(ymax-ymin);
+				qPoint p;
+			p.getPoint(x,y);
+			bool found = false;
+			while (counter < TIMEOUT && !found ) {
+				double rotation = rand_between(0,2*CGAL_PI);
+				p.rotation = rotation;
+				p.vec[2] = rotation;
+					if(queryHandler.isLegalConfiguration(p.xy,p.rotation)) {
+						p.index = currInd;
+						V.push_back(p);
+						currInd++;
+						found = true;
+					}
+				counter++;
+			}
+
 		}
-		counter++;
 	}
 
-	if (counter==TIMEOUT) {
-		cout<<"TIMEOUT"<<endl;
-	}
+	int N=V.size();
+
+
+	vector<vector<double>> graph(N, vector<double>(N,numeric_limits<double>::max())); //matrix representation of the graph
+
+
 
 	// 0 - default, 1 - clockwise is best(/only option), (-1) - cc, 2 - no route
-	short direction[N][N] = {0};
+	short direction[N][N];
+
+
+	for (int i=0; i<N; i++) {
+		for (int j=0; j<N; j++) {
+			direction[i][j]=0;
+		}
+	}
 
 	Tree tree;
 
@@ -448,7 +451,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	    	Neighbor n;
 	    	qPoint q1 = it->first;
 	    	n.p = q1;
-	    		short dir = getDirection(direction,q, q1, queryHandler);
+	    		short dir = getDirection(direction[q.index][q1.index],q, q1, queryHandler);
 	    		if(dir != 2) {
 	    			n.isClockwise = (dir == 1);
 	    			n.distance = dist(q, q1, n.isClockwise);
@@ -466,17 +469,16 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	}
 
 
+
 	vector<int> path = dijkstra(graph, N, /*index of source*/0, /*index of target*/1);
 
 
-	cout<<path.size()<<endl;
 	// TODO : check if should include last step
 	for(int i=0; i<path.size(); i++) {
 		Path::PathMovement movement;
 		movement.location = V[path[i]].xy;
-		cout<<movement.location<<endl;
 		movement.rotation = V[path[i]].rotation;
-		movement.orientation =
+			movement.orientation =
 				( direction[V[path[i-1]].index][V[path[i]].index] == 1 ?
 						CGAL::CLOCKWISE :
 						CGAL::COUNTERCLOCKWISE);
