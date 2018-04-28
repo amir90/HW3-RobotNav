@@ -6,8 +6,8 @@
 #include "MyQueryHandler.h"
 
 #define STEPS 64
-#define Nx 50
-#define Ny 50
+#define Nbbox 10
+#define Nrand 900
 #define K 20
 #define TIMEOUT 100
 #define TRANSLATION_WEIGHT 0.8
@@ -381,8 +381,8 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	//bbox = CGAL::Bbox_2(-2,-2,2,2);
 
 	float bsr = 0.1;
-	double xmin = bbox.xmin()-bsr, xmax = bbox.xmax()+bsr,
-	ymin = bbox.ymin()-bsr, ymax = bbox.ymax()+bsr;
+	double xmin = bbox.xmin(), xmax = bbox.xmax(),
+	ymin = bbox.ymin(), ymax = bbox.ymax();
 
 	qPoint qstart, qend;
 	qstart.xy = rodStartPoint;
@@ -397,12 +397,11 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	int currInd = 2;
 
 
-	for (int i=0; i<Nx; i++) {
-		for (int j=0; j<Ny; j++) {
-
+	//4*Nbbox configurations on bbox
+	for (int i=0; i<Nbbox; i++) {
 			int counter = 0;
-			double x = xmin+(double) i/(Nx-1)*(xmax-xmin);
-			double y = ymin+(double) j/(Ny-1)*(ymax-ymin);
+			double x = (xmin-bsr)*(double)(i/Nbbox-1)+(xmax+bsr)*(1-double(i/Nbbox-1));
+			double y = (ymin-bsr);
 				qPoint p;
 			p.getPoint(x,y);
 			bool found = false;
@@ -420,8 +419,90 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 			}
 
 		}
-	}
 
+	for (int i=0; i<Nbbox; i++) {
+			int counter = 0;
+			double x = (xmin-bsr)*(double)(i/Nbbox-1)+(xmax+bsr)*(1-double(i/Nbbox-1));
+			double y = (ymax+bsr);
+				qPoint p;
+			p.getPoint(x,y);
+			bool found = false;
+			while (counter < TIMEOUT && !found ) {
+				double rotation = rand_between(0,2*CGAL_PI);
+				p.rotation = rotation;
+				p.vec[2] = rotation;
+					if(queryHandler.isLegalConfiguration(p.xy,p.rotation)) {
+						p.index = currInd;
+						V.push_back(p);
+						currInd++;
+						found = true;
+					}
+				counter++;
+			}
+
+		}
+
+	for (int i=0; i<Nbbox; i++) {
+			int counter = 0;
+			double x = (xmin-bsr);
+			double y = (ymin-bsr)*(double)(i/Nbbox-1)+(ymax+bsr)*(1-double(i/Nbbox-1));
+				qPoint p;
+			p.getPoint(x,y);
+			bool found = false;
+			while (counter < TIMEOUT && !found ) {
+				double rotation = rand_between(0,2*CGAL_PI);
+				p.rotation = rotation;
+				p.vec[2] = rotation;
+					if(queryHandler.isLegalConfiguration(p.xy,p.rotation)) {
+						p.index = currInd;
+						V.push_back(p);
+						currInd++;
+						found = true;
+					}
+				counter++;
+			}
+
+		}
+
+	for (int i=0; i<Nbbox; i++) {
+			int counter = 0;
+			double x = (xmax+bsr);
+				double y = (ymin-bsr)*(double)(i/Nbbox-1)+(ymax+bsr)*(1-double(i/Nbbox-1));
+				qPoint p;
+			p.getPoint(x,y);
+			bool found = false;
+			while (counter < TIMEOUT && !found ) {
+				double rotation = rand_between(0,2*CGAL_PI);
+				p.rotation = rotation;
+				p.vec[2] = rotation;
+					if(queryHandler.isLegalConfiguration(p.xy,p.rotation)) {
+						p.index = currInd;
+						V.push_back(p);
+						currInd++;
+						found = true;
+					}
+				counter++;
+			}
+
+		}
+
+
+
+	//N random configurations
+
+	int currRandPoints=0;
+	int counter =0;
+	while (counter < TIMEOUT && currRandPoints<Nrand ) {
+		qPoint temp = newRandomQPoint(xmin,xmax,ymin,ymax);
+			if(queryHandler.isLegalConfiguration(temp.xy,temp.rotation)) {
+				temp.index = currInd;
+				V.push_back(temp);
+				currInd++;
+				currRandPoints++;
+				counter=0;
+			}
+		counter++;
+	}
 
 	int N=V.size();
 
@@ -429,12 +510,9 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	vector<vector<double>> graph(N, vector<double>(N,numeric_limits<double>::max())); //matrix representation of the graph
 
 
-	cout << "GOT here" << endl;
 
 	// 0 - default, 1 - clockwise is best(/only option), (-1) - cc, 2 - no route
-	short **direction = (short **)malloc(N * sizeof(short *));
-    for (int i=0; i<N; i++)
-         direction[i] = (short *)malloc(N * sizeof(short));
+	short direction[N][N];
 
 
 	for (int i=0; i<N; i++) {
@@ -442,12 +520,10 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 			direction[i][j]=0;
 		}
 	}
-	
 
 	Tree tree;
 
 	tree.insert(V.begin(),V.end());
-
 
 	for (qPoint q: V ) {
 
