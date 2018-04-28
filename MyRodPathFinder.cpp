@@ -7,10 +7,10 @@
 
 #define STEPS 64
 #define Nbbox 10
-#define Nrand 900
+#define Nrand 150
 #define K 20
 #define TIMEOUT 100
-#define TRANSLATION_WEIGHT 0.8
+#define TRANSLATION_WEIGHT 0.01
 
 struct qPoint {
 	Point_2 xy;
@@ -79,13 +79,13 @@ double dist_2(qPoint p1, qPoint p2, bool isClockwise,double rodLength) {
 	double tw = TRANSLATION_WEIGHT;
 	double rw = 1 - tw;
 	double t_dist = CGAL::squared_distance(p1.xy, p2.xy).to_double();
-	double r_dist = (p1.rotation - p2.rotation);// * (isClockwise ? -1 : 1);
+	double r_dist = (p2.rotation - p1.rotation);// * (isClockwise ? -1 : 1);
 	if (isClockwise) {
-		r_dist = (r_dist>=0?r_dist:r_dist+2*CGAL_PI)*rodLength;
+		r_dist = (r_dist>=0?2*CGAL_PI-r_dist:-r_dist)*rodLength;
 	} else {
-		r_dist = (r_dist<0?-r_dist:r_dist+2*CGAL_PI)*rodLength;
+		r_dist = (r_dist>=0?r_dist:2*CGAL_PI-r_dist)*rodLength;
 	}
-	return tw * t_dist + rw * r_dist;
+	return tw * t_dist + rw * (r_dist);
 }
 
 
@@ -264,7 +264,7 @@ struct Distance {
   typedef double FT;
   typedef CGAL::Dimension_tag<3> D;
   double transformed_distance(const qPoint& p1, const qPoint& p2) const {
-    return dist_min(p1,p2);
+    return dist_1(p1,p2);
   }
   double min_distance_to_rectangle(const qPoint& p,
                    const CGAL::Kd_tree_rectangle<FT,D>& b) const {
@@ -400,7 +400,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	//4*Nbbox configurations on bbox
 	for (int i=0; i<Nbbox; i++) {
 			int counter = 0;
-			double x = (xmin-bsr)*(double)(i/Nbbox-1)+(xmax+bsr)*(1-double(i/Nbbox-1));
+			double x = (xmin-bsr)*(double)(i/(Nbbox-1))+(xmax+bsr)*(1-double(i/(Nbbox-1)));
 			double y = (ymin-bsr);
 				qPoint p;
 			p.getPoint(x,y);
@@ -422,7 +422,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	for (int i=0; i<Nbbox; i++) {
 			int counter = 0;
-			double x = (xmin-bsr)*(double)(i/Nbbox-1)+(xmax+bsr)*(1-double(i/Nbbox-1));
+			double x = (xmin-bsr)*(double)(i/(Nbbox-1))+(xmax+bsr)*(1-double(i/(Nbbox-1)));
 			double y = (ymax+bsr);
 				qPoint p;
 			p.getPoint(x,y);
@@ -445,7 +445,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	for (int i=0; i<Nbbox; i++) {
 			int counter = 0;
 			double x = (xmin-bsr);
-			double y = (ymin-bsr)*(double)(i/Nbbox-1)+(ymax+bsr)*(1-double(i/Nbbox-1));
+			double y = (ymin-bsr)*(double)(i/(Nbbox-1))+(ymax+bsr)*(1-double(i/(Nbbox-1)));
 				qPoint p;
 			p.getPoint(x,y);
 			bool found = false;
@@ -467,7 +467,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	for (int i=0; i<Nbbox; i++) {
 			int counter = 0;
 			double x = (xmax+bsr);
-				double y = (ymin-bsr)*(double)(i/Nbbox-1)+(ymax+bsr)*(1-double(i/Nbbox-1));
+				double y = (ymin-bsr)*(double)(i/(Nbbox-1))+(ymax+bsr)*(1-double((i/Nbbox-1)));
 				qPoint p;
 			p.getPoint(x,y);
 			bool found = false;
@@ -506,13 +506,14 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	int N=V.size();
 
-
+//cout<<N<<endl;
 	vector<vector<double>> graph(N, vector<double>(N,numeric_limits<double>::max())); //matrix representation of the graph
 
 
 
 	// 0 - default, 1 - clockwise is best(/only option), (-1) - cc, 2 - no route
 	short direction[N][N];
+
 
 
 	for (int i=0; i<N; i++) {
@@ -549,9 +550,11 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	      }
 	}
-
-
-
+/*
+		for (int j=0; j<N; j++) {
+			cout<<direction[0][j]<<" ";
+		}
+*/
 	vector<int> path = dijkstra(graph, N, /*index of source*/0, /*index of target*/1);
 
 
