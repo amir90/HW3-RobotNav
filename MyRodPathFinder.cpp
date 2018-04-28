@@ -5,10 +5,10 @@
 #include "MyRodPathFinder.h"
 #include "MyQueryHandler.h"
 
-#define STEPS 128
-#define N 100
+#define STEPS 64
+#define N 1000
 #define K 20
-#define TIMEOUT 1000
+#define TIMEOUT 10000
 #define TRANSLATION_WEIGHT 0.8
 
 struct qPoint {
@@ -111,7 +111,7 @@ struct setComp{
 
 // fix to range [0, 2pi)
 double fixedAngle(double angle) {
-	return fmod(angle, CGAL_PI);
+	return fmod(angle, 2*CGAL_PI);
 }
 
 qPoint getPointAtStep(double i, qPoint q1, qPoint q2, bool isClockwise) {
@@ -149,7 +149,7 @@ int minDistance(double* dist, bool* sptSet, int V)
    return min_index;
 }
 
-vector<int> dijkstra(double graph[N][N], int V, int src, int target)
+vector<int> dijkstra(vector<vector<double>> graph, int V, int src, int target)
 {
 	vector<int> path;
 	double MAX = numeric_limits<double>::max();
@@ -218,15 +218,16 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 
 	double d[2] = {-1, -1};
 	for(int countDirection = 0; countDirection < 2; countDirection++) {
-		bool isClockwise = countDirection;
+		bool isClockwise = 1-countDirection;
 		bool collides = false;
 
 		int currStepSize = 2;
 
 		while(currStepSize!=STEPS && !collides) {
-			for (int i = 1; i<currStepSize; i++) {
+			for (int i = 1; i<currStepSize; i=i+2) {
 			qPoint qMid = getPointAtStep((double)i/currStepSize, q1, q2, isClockwise);
-				if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
+		//	cout<<(double) i/currStepSize<<": "<<qMid.xy.x().to_double()<<" , "<<qMid.xy.y().to_double()<<" , "<<qMid.rotation<<endl;
+			if(!handler.isLegalConfiguration(qMid.xy, qMid.rotation)) {
 					collides = true;
 					break;
 				}
@@ -239,13 +240,15 @@ double localPlanner (qPoint q1 ,qPoint q2, MyQueryHandler handler) {
 			d[countDirection] = dist(q1, q2, isClockwise);
 	}
 
+	//cout<<d[0]<<" "<<d[1]<<endl;
+
 	// no route
 	if(d[0]<0 && d[1]<0) {
 		return 2;
 	}
 
 	// clockwise is a valid route that is neccessarily shorter than cc
-	if(d[0] < d[1] && (d[1]>=0 && d[0]>=0) || (d[0]>=0 && d[1]<0)) {
+	if((d[0] < d[1] && (d[1]>=0 && d[0]>=0)) || (d[0]>=0 && d[1]<0)) {
 		return 1;
 	}
 		return -1;
@@ -359,9 +362,11 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 //	int n = 10; //number of nodes to put in the Roadmap
 //	int k = 5; //number of closest neighbors to examine for each configuration
 //	int timeout = 1000;
-	qPoint V[N]; //Vertices;
+	vector<qPoint> V(N); //Vertices;
 
-	double graph[N][N] = {numeric_limits<double>::max()}; //matrix representation of the graph
+	vector<vector<double>> graph(N, vector<double>(N));// = {numeric_limits<double>::max()}; //matrix representation of the graph
+
+
 
 	MyQueryHandler queryHandler(rodLength,obstacles);
 	
@@ -379,16 +384,18 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	bbox = bbox + Segment_2(rodStartPoint,rodEndPoint).bbox();
 
-	//bbox = CGAL::Bbox_2(-1,-1,1,1);
+	//bbox = CGAL::Bbox_2(-2,-2,2,2);
 
 	cout<<bbox.xmax()<<" "<<bbox.xmin()<<" "<<bbox.ymax()<<" "<<bbox.ymin()<<endl;
 
-	float bsr = 1.1;
+	float bsr = 0.05;
 	double xmin = bbox.xmin()-bsr, xmax = bbox.xmax()+bsr,
 	ymin = bbox.ymin()-bsr, ymax = bbox.ymax()+bsr;
 
 	cout<<xmax<<" "<<xmin<<" "<<ymax<<" "<<ymin<<endl;
 
+
+	cout<<CGAL::CLOCKWISE<<endl;
 
 	qPoint qstart, qend;
 	qstart.xy = rodStartPoint;
@@ -407,20 +414,26 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 	while (currInd < N && counter < TIMEOUT ) {
 
 		qPoint temp = newRandomQPoint(xmin, xmax, ymin, ymax); 
+
 		if(queryHandler.isLegalConfiguration(temp.xy,temp.rotation)) {
 			temp.index = currInd;
 			V[currInd] = temp;
 			currInd++;
 			counter=0;
 		}
-
 		counter++;
+	}
+
+	if (counter==TIMEOUT) {
+		cout<<"TIMEOUT"<<endl;
 	}
 
 	// 0 - default, 1 - clockwise is best(/only option), (-1) - cc, 2 - no route
 	short direction[N][N] = {0};
 
-	Tree tree(V,V+N);
+	Tree tree;
+
+	tree.insert(V.begin(),V.end());
 
 	for (qPoint q: V ) {
 
@@ -450,13 +463,16 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	vector<int> path = dijkstra(graph, N, /*index of source*/0, /*index of target*/1);
 
+
+	cout<<path.size()<<endl;
 	// TODO : check if should include last step
 	for(int i=0; i<path.size(); i++) {
 		Path::PathMovement movement;
 		movement.location = V[path[i]].xy;
+		cout<<movement.location<<endl;
 		movement.rotation = V[path[i]].rotation;
 		movement.orientation =
-				( direction[V[path[i-1]].index][V[path[i]].index] == -1 ?
+				( direction[V[path[i-1]].index][V[path[i]].index] == 1 ?
 						CGAL::CLOCKWISE :
 						CGAL::COUNTERCLOCKWISE);
 

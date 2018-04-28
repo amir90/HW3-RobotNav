@@ -17,6 +17,8 @@
 #include <CGAL/Arr_extended_dcel.h>
 #include <CGAL/Search_traits.h>
 #include <CGAL/Orthogonal_k_neighbor_search.h>
+#include <CGAL/Arr_naive_point_location.h>
+#include <CGAL/Arr_landmarks_point_location.h>
 
 typedef typename CGAL::Gmpq Number_type;
 typedef typename CGAL::Cartesian<Number_type> Kernel;
@@ -32,6 +34,8 @@ typedef typename CGAL::Polygon_set_2<Kernel> Polygon_set_2;
 //typedef CGAL::Arrangement_2<Traits_2>            Arrangement_2;
 typedef typename Polygon_set_2::Arrangement_2				Arrangement_2;
 typedef typename Arrangement_2::Face_handle 					Face;
+typedef CGAL::Arr_naive_point_location<Arrangement_2>           Naive_pl;
+typedef CGAL::Arr_landmarks_point_location<Arrangement_2>       Landmarks_pl;
 
 
 #endif //RODQUERY_CGAL_DEFINES_H

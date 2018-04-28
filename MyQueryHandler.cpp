@@ -7,11 +7,13 @@
 MyQueryHandler::MyQueryHandler(const FT &rodLength, const vector<Polygon_2> &obstacles) {
     myLength = rodLength;
     myObstacles = obstacles;
+    naive_pl.attach(arr);
     Polygon_set_2 tempPolygonSet;
     for (Polygon_2 p: obstacles) {
     	tempPolygonSet.insert(p);
     }
     this->arr =tempPolygonSet.arrangement();
+
 }
 
 bool MyQueryHandler::_isLegalConfiguration(const Point_2 &point, const Vector_2 &direction, const double rotation) {
