@@ -45,13 +45,18 @@ double rand_between(double high, double low) {
 	return low + static_cast <double> (rand()) /( static_cast <double> (RAND_MAX/(high-low)));
 }
 
-qPoint newRandomQPoint(double xmin, double xmax, double ymin, double ymax) {
+qPoint newRandomQPoint(MyQueryHandler handler, double xmin, double xmax, double ymin, double ymax) {
 	double x = rand_between(xmin,xmax);
 	double y = rand_between(ymin, ymax);
 	double rotation = rand_between(0,2*CGAL_PI);
 
 	qPoint p;
 	p.getPoint(x,y);
+
+	for(int i=0; i<100 && ! handler.isLegalConfiguration(p.xy, rotation); i++) {
+		rotation = rand_between(0,2*CGAL_PI);
+	}
+
 	p.rotation = rotation;
 	p.vec[2] = rotation;
 	return p;
@@ -413,7 +418,7 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 
 	while (currInd < N && counter < TIMEOUT ) {
 
-		qPoint temp = newRandomQPoint(xmin, xmax, ymin, ymax); 
+		qPoint temp = newRandomQPoint(queryHandler, xmin, xmax, ymin, ymax);
 
 		if(queryHandler.isLegalConfiguration(temp.xy,temp.rotation)) {
 			temp.index = currInd;
