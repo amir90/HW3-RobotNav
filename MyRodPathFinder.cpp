@@ -72,7 +72,7 @@ double dist_1(qPoint p1, qPoint p2) {
 	FT sDist = CGAL::squared_distance(s1, s2);
 	FT dDist = CGAL::squared_distance(t1, t2);
 
-	return sDist.to_double() + dDist.to_double();
+	return sqrt(sDist.to_double() + dDist.to_double());
 }
 
 double dist_2(qPoint p1, qPoint p2, bool isClockwise,double rodLength) {
@@ -85,7 +85,7 @@ double dist_2(qPoint p1, qPoint p2, bool isClockwise,double rodLength) {
 	} else {
 		r_dist = (r_dist>=0?r_dist:2*CGAL_PI-r_dist)*rodLength;
 	}
-	return tw * t_dist + rw * (r_dist);
+	return tw * sqrt(t_dist) + rw * (r_dist);
 }
 
 
