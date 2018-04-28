@@ -422,15 +422,19 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 		}
 	}
 
+
 	int N=V.size();
 
 
 	vector<vector<double>> graph(N, vector<double>(N,numeric_limits<double>::max())); //matrix representation of the graph
 
 
+	cout << "GOT here" << endl;
 
 	// 0 - default, 1 - clockwise is best(/only option), (-1) - cc, 2 - no route
-	short direction[N][N];
+	short **direction = (short **)malloc(N * sizeof(short *));
+    for (int i=0; i<N; i++)
+         direction[i] = (short *)malloc(N * sizeof(short));
 
 
 	for (int i=0; i<N; i++) {
@@ -438,10 +442,12 @@ MyRodPathFinder::getPath(FT rodLength, Point_2 rodStartPoint, double rodStartRot
 			direction[i][j]=0;
 		}
 	}
+	
 
 	Tree tree;
 
 	tree.insert(V.begin(),V.end());
+
 
 	for (qPoint q: V ) {
 
